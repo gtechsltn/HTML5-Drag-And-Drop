@@ -1,5 +1,31 @@
 # HTML5 Drag and Drop
 
+```
+  drop: function(event) {
+    event.preventDefault();
+    var files = event.dataTransfer.files;
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append('file', files[i]);
+    }
+    xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload');
+    xhr.upload.onprogress = function (event) {
+      if (event.lengthComputable) {
+        var complete = (event.loaded / event.total * 100 | 0);
+        this.$('progress').value = complete;
+      }
+    }
+    xhr.onload = function() {
+      App.File.store.push('file', {
+        id: 1,
+        name: 'Name'
+      });
+    }
+    xhr.send(formData);
+  }
+```
+
 ## Progress Bar
 + https://fellowtuts.com/php/drag-n-drop-multiple-ajax-images-upload-with-progress-bar/
 + https://danielmg.org/demo/java-script/uploader/
